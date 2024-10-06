@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Random Number Generator & Advanced Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.3.2/math.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --primary-color: #4CAF50;
+            --dark-bg-color: #1e1e1e;
+            --dark-text-color: #ffffff;
+            --transition-speed: 0.3s;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        #themeToggle {
+            cursor: pointer;
+            padding: 10px;
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .random-number-generator, .calculator {
+            border: 1px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: var(--bg-color);
+            transition: background-color var(--transition-speed);
+        }
+        .dark-mode .random-number-generator, .dark-mode .calculator {
+            background-color: var(--dark-bg-color);
+            color: var(--dark-text-color);
+        }
+        .button {
+            padding: 10px 15px;
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .history {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            padding: 10px;
+            background-color: var(--bg-color);
+            transition: background-color var(--transition-speed);
+        }
+        .dark-mode .history {
+            background-color: var(--dark-bg-color);
+        }
+        canvas {
+            margin-top: 20px;
+        }
+        .tooltip {
+            display: none;
+            position: absolute;
+            background: #333;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Smart Random Number Generator & Advanced Calculator</h1>
+        <button id="themeToggle">Toggle Dark Mode</button>
+        
+        <div class="random-number-generator">
+            <h2>Random Number Generator</h2>
+            <input type="number" id="min" placeholder="Min" />
+            <input type="number" id="max" placeholder="Max" />
+            <select id="type">
+                <option value="int">Integer</option>
+                <option value="float">Float</option>
+            </select>
+            <input type="number" id="quantity" placeholder="Quantity" />
+            <button id="generate" class="button">Generate</button>
+            <div id="generatedNumbers"></div>
+            <div class="history" id="numberHistory"></div>
+        </div>
+
+        <div class="calculator">
+            <h2>Advanced Calculator</h2>
+            <input type="text" id="calcInput" placeholder="Enter calculation" />
+            <button id="calculate" class="button">Calculate</button>
+            <div id="calcResult"></div>
+            <canvas id="calcGraph"></canvas>
+        </div>
+    </div>
+    <script>
+        let darkMode = false;
+        document.getElementById('themeToggle').onclick = () => {
+            darkMode = !darkMode;
+            document.body.classList.toggle('dark-mode', darkMode);
+            document.documentElement.style.setProperty('--bg-color', darkMode ? '#1e1e1e' : '#ffffff');
+            document.documentElement.style.setProperty('--text-color', darkMode ? '#ffffff' : '#000000');
+        };
+
+        document.getElementById('generate').onclick = () => {
+            const min = parseFloat(document.getElementById('min').value);
+            const max = parseFloat(document.getElementById('max').value);
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const type = document.getElementById('type').value;
+            let numbers = [];
+            for (let i = 0; i < quantity; i++) {
+                numbers.push(type === 'int' ? Math.floor(Math.random() * (max - min + 1)) + min : (Math.random() * (max - min) + min).toFixed(2));
+            }
+            document.getElementById('generatedNumbers').innerText = 'Generated Numbers: ' + numbers.join(', ');
+            localStorage.setItem('generatedNumbers', JSON.stringify(numbers));
+            updateHistory(numbers);
+        };
+
+        function updateHistory(numbers) {
+            const historyDiv = document.getElementById('numberHistory');
+            historyDiv.innerHTML += '<div>' + numbers.join(', ') + '</div>';
+        }
+
+        document.getElementById('calculate').onclick = () => {
+            const input = document.getElementById('calcInput').value;
+            try {
+                const result = math.evaluate(input);
+                document.getElementById('calcResult').innerText = 'Result: ' + result;
+                plotGraph(input);
+            } catch (error) {
+                document.getElementById('calcResult').innerText = 'Error: ' + error.message;
+            }
+        };
+
+        function plotGraph(expression) {
+            const ctx = document.getElementById('calcGraph').getContext('2d');
+            const xValues = Array.from({length: 100}, (_, i) => i - 50);
+            const yValues = xValues.map(x => math.evaluate(expression.replace(/x/g, x)));
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        label: 'Graph of ' + expression,
+                        data: yValues,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { type: 'linear', position: 'bottom' },
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
