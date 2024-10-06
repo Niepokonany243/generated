@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotely - Your Intelligent Quote Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@tensorflow/tfjs"></script>
+    <script src="https://unpkg.com/@tensorflow-models/facemesh"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://platform.twitter.com/widgets.js" async defer></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            color: #fff;
+        }
+        .bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            filter: blur(5px);
+            z-index: -1;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .quote {
+            font-size: 2.5rem;
+            margin: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .author {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .mood-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .mood-button {
+            background-color: #4A5568;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .mood-button:hover {
+            background-color: #2D3748;
+        }
+        .share-buttons {
+            margin-top: 20px;
+        }
+        .share-button {
+            margin: 0 10px;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg" id="background"></div>
+    <div class="container">
+        <div class="quote" id="quote">Loading...</div>
+        <div class="author" id="author"></div>
+        <div class="mood-selector">
+            <button class="mood-button" onclick="setMood('happy')">😊 Happy</button>
+            <button class="mood-button" onclick="setMood('sad')">😢 Sad</button>
+            <button class="mood-button" onclick="setMood('motivational')">💪 Motivational</button>
+        </div>
+        <div class="share-buttons">
+            <a class="share-button" id="twitter-share" href="#" target="_blank" title="Share on Twitter">🕊️</a>
+        </div>
+    </div>
+    <script>
+        const quoteElement = document.getElementById('quote');
+        const authorElement = document.getElementById('author');
+        const backgroundElement = document.getElementById('background');
+        let currentMood = '';
+
+        async function fetchQuote(mood) {
+            const response = await axios.get(`https://quotes.rest/qod?category=${mood}`);
+            const quoteData = response.data.contents.quotes[0];
+            return quoteData;
+        }
+
+        async function updateQuote() {
+            const quoteData = await fetchQuote(currentMood);
+            quoteElement.textContent = quoteData.quote;
+            authorElement.textContent = `- ${quoteData.author}`;
+            animateQuote();
+            updateBackground();
+            updateTwitterShare(quoteData.quote, quoteData.author);
+        }
+
+        function animateQuote() {
+            gsap.to(quoteElement, { opacity: 1, y: 0, duration: 1 });
+            gsap.to(authorElement, { opacity: 1, y: 0, duration: 1, delay: 0.5 });
+        }
+
+        function setMood(mood) {
+            currentMood = mood;
+            updateQuote();
+        }
+
+        function updateBackground() {
+            const randomNum = Math.floor(Math.random() * 1000);
+            backgroundElement.style.backgroundImage = `url('https://source.unsplash.com/featured/?${currentMood}&${randomNum}')`;
+        }
+
+        function updateTwitterShare(quote, author) {
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(quote)} - ${encodeURIComponent(author)}`;
+            document.getElementById('twitter-share').href = twitterUrl;
+        }
+
+        window.onload = () => {
+            updateBackground();
+            setMood('happy');
+        };
+    </script>
+</body>
+</html>
+```
