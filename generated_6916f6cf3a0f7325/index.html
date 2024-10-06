@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scripting Mastery</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js"></script>
+    <script src="https://unpkg.com/@webxr-polyfill/webxr-polyfill@latest/build/webxr-polyfill.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1e1e2f;
+            color: #ffffff;
+            overflow: hidden;
+        }
+        .header {
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(90deg, #4e54c8, #8f94fb);
+        }
+        .tutorials {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 20px;
+        }
+        .card {
+            background-color: #282c34;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            width: 300px;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .footer {
+            padding: 20px;
+            text-align: center;
+            background-color: #4e54c8;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #4e54c8;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #8f94fb;
+        }
+        .quiz-container {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        const { useState, useEffect } = React;
+
+        const App = () => {
+            const [tutorials, setTutorials] = useState([]);
+
+            useEffect(() => {
+                fetch('https://api.example.com/tutorials')
+                    .then(response => response.json())
+                    .then(data => setTutorials(data));
+            }, []);
+
+            return (
+                <div>
+                    <header className="header">
+                        <h1 className="text-4xl">Scripting Mastery</h1>
+                        <p className="text-lg">Learn game scripting skills interactively!</p>
+                    </header>
+                    <main className="tutorials">
+                        {tutorials.map(tutorial => (
+                            <div key={tutorial.id} className="card">
+                                <h2 className="text-2xl">{tutorial.title}</h2>
+                                <p>{tutorial.description}</p>
+                                <button className="button" onClick={() => alert(`Starting tutorial: ${tutorial.title}`)}>Start Tutorial</button>
+                            </div>
+                        ))}
+                    </main>
+                    <footer className="footer">
+                        <p>© 2023 Scripting Mastery. All rights reserved.</p>
+                    </footer>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('app'));
+    </script>
+</body>
+</html>
