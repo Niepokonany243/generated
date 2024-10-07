@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Calculator</title>
+    <style>
+        :root {
+            --primary-color: #ffffff;
+            --secondary-color: #000000;
+            --bg-color: var(--secondary-color);
+            --font-color: var(--primary-color);
+            --transition-duration: 0.5s;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--font-color);
+            transition: background-color var(--transition-duration), color var(--transition-duration);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .calculator {
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .display {
+            text-align: right;
+            padding: 20px;
+            font-size: 2em;
+        }
+
+        .keys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .key {
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: var(--primary-color);
+            color: var(--secondary-color);
+            border: 1px solid var(--secondary-color);
+            transition: background-color var(--transition-duration), color var(--transition-duration);
+        }
+
+        .key:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .key:active {
+            transform: scale(0.95);
+        }
+
+        .key[data-type="operator"] {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .key[data-type="operator"]:hover {
+            background: var(--primary-color);
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+<button class="dark-mode-toggle">Toggle Dark Mode</button>
+<div class="calculator">
+    <div class="display" tabindex="0" aria-label="calculator display"></div>
+    <div class="keys" role="group">
+        <div class="key" data-type="number">7</div>
+        <div class="key" data-type="number">8</div>
+        <div class="key" data-type="number">9</div>
+        <div class="key" data-type="operator">/</div>
+        <div class="key" data-type="number">4</div>
+        <div class="key" data-type="number">5</div>
+        <div class="key" data-type="number">6</div>
+        <div class="key" data-type="operator">*</div>
+        <div class="key" data-type="number">1</div>
+        <div class="key" data-type="number">2</div>
+        <div class="key" data-type="number">3</div>
+        <div class="key" data-type="operator">-</div>
+        <div class="key" data-type="number">0</div>
+        <div class="key" data-type="clear">C</div>
+        <div class="key" data-type="equals">=</div>
+        <div class="key" data-type="operator">+</div>
+    </div>
+</div>
+
+<script>
+    let display = document.querySelector('.display');
+    let keys = Array.from(document.querySelectorAll('.key'));
+    keys.forEach(key => {
+        key.addEventListener('click', e => {
+            let keyType = e.target.getAttribute('data-type');
+            let displayVal = display.textContent;
+            let keyVal = e.target.textContent;
+            if (keyType === "number") {
+                display.textContent += keyVal;
+            } else if (keyType === "operator") {
+                display.textContent += ' ' + keyVal + ' ';
+            } else if (keyType === "equals") {
+                try {
+                    display.textContent = eval(displayVal);
+                } catch (error) {
+                    display.textContent = "Error";
+                    setTimeout(() => display.textContent = "", 500);
+                }
+            } else if (keyType === "clear") {
+                display.textContent = "";
+            }
+        });
+    });
+
+    let darkModeToggle = document.querySelector('.dark-mode-toggle');
+    darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        if (document.body.classList.contains('dark')) {
+            document.documentElement.style.setProperty('--primary-color', '#000000');
+            document.documentElement.style.setProperty('--secondary-color', '#ffffff');
+        } else {
+            document.documentElement.style.setProperty('--primary-color', '#ffffff');
+            document.documentElement.style.setProperty('--secondary-color', '#000000');
+        }
+    });
+</script>
+</body>
+</html>
