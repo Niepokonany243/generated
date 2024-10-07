@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Webpage</title>
+    <style>
+    
+    </style>
+</head>
+<body>
+    Here's a simple implementation of the project plan provided:
+
+index.html:
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="calculator">
+        <div id="display"></div>
+        <div id="buttons">
+            <button value="1">1</button>
+            <button value="2">2</button>
+            <button value="3">3</button>
+            <button value="4">4</button>
+            <button value="5">5</button>
+            <button value="6">6</button>
+            <button value="7">7</button>
+            <button value="8">8</button>
+            <button value="9">9</button>
+            <button value="0">0</button>
+            <button value=".">.</button>
+            <button value="=">=</button>
+            <button value="+">+</button>
+            <button value="-">-</button>
+            <button value="*">*</button>
+            <button value="/">/</button>
+            <button value="clear">Clear</button>
+        </div>
+        <div id="history"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+style.css:
+```css
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+}
+
+#calculator {
+    width: 90%;
+    max-width: 600px;
+    margin: 50px auto;
+    border: 1px solid #f0f0f0;
+    padding: 20px;
+    background-color: white;
+}
+
+#display {
+    height: 100px;
+    border: 1px solid #f0f0f0;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px;
+    font-size: 2em;
+}
+
+#buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+#buttons button {
+    padding: 20px;
+    font-size: 2em;
+    border: none;
+    background-color: #f0f0f0;
+    transition: background-color 0.3s;
+}
+
+#buttons button:hover {
+    background-color: #ddd;
+}
+
+#history {
+    margin-top: 20px;
+    height: 200px;
+    overflow-y: scroll;
+    border: 1px solid #f0f0f0;
+}
+```
+
+script.js:
+```javascript
+document.querySelectorAll('#buttons button').forEach(button => {
+    button.addEventListener('click', () => {
+        const action = button.value;
+        const display = document.querySelector('#display');
+        const history = document.querySelector('#history');
+
+        if (action === 'clear') {
+            display.textContent = '';
+            return;
+        }
+
+        if (action === '=') {
+            try {
+                const result = eval(display.textContent);
+                history.innerHTML += `${display.textContent} = ${result}<br>`;
+                display.textContent = result;
+            } catch {
+                display.textContent = 'Error';
+            }
+            return;
+        }
+
+        display.textContent += action;
+    });
+});
+```
+
+I've kept this simple for demonstration purposes. The calculator handles basic arithmetic operations (addition, subtraction, multiplication, and division). When a calculation is performed, it's added to the history. The user can also clear the display.
+
+This implementation uses modern JavaScript (ES6), CSS3 and HTML5 techniques, including Flexbox and Grid for layout, and addEventListener for handling button clicks. The design is responsive and should work well on both desktop and mobile devices. It also includes basic error handling.
+    <script>
+    
+    </script>
+</body>
+</html>
