@@ -1,0 +1,116 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Web Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        #container {
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            text-align: center;
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h1>Random Web Generator</h1>
+        <p>Click the button below to generate a random webpage layout, colors, and content!</p>
+        <button onclick="generateRandomWeb()">Generate Random Web</button>
+    </div>
+
+    <script>
+        function generateRandomWeb() {
+            // Generate random colors
+            const randomColor1 = getRandomColor();
+            const randomColor2 = getRandomColor();
+            const randomColor3 = getRandomColor();
+
+            // Generate random layout
+            const randomLayout = Math.floor(Math.random() * 3) + 1;
+
+            // Set random colors to the webpage
+            document.body.style.backgroundColor = randomColor1;
+            document.body.style.color = randomColor2;
+
+            // Set random colors to the container
+            const container = document.getElementById('container');
+            container.style.backgroundColor = randomColor3;
+
+            // Set random layout
+            switch (randomLayout) {
+                case 1:
+                    container.style.flexDirection = 'row';
+                    break;
+                case 2:
+                    container.style.flexDirection = 'column';
+                    break;
+                case 3:
+                    container.style.flexDirection = 'row-reverse';
+                    break;
+                default:
+                    container.style.flexDirection = 'row';
+                    break;
+            }
+
+            // Add random placeholder content
+            container.innerHTML = `
+                <h1>Welcome to Random Web!</h1>
+                <p>This is a randomly generated webpage with colors and layout.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet turpis eget ligula ullamcorper luctus. Quisque auctor pulvinar nisi.</p>
+            `;
+        }
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    </script>
+</body>
+
+</html>
+```
