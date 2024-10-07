@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Number Generator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+    }
+
+    #container {
+        text-align: center;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #number {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
+</head>
+<body>
+<div id="container">
+    <h1>Random Number Generator</h1>
+    <p>Click the button below to generate a random number between 1 and 100:</p>
+    <p id="number"></p>
+    <button onclick="generateRandomNumber()">Generate Number</button>
+</div>
+
+<script>
+    // Function to generate a random number between 1 and 100
+    function generateRandomNumber() {
+        const randomNumber = Math.floor(Math.random() * 100) + 1;
+        document.getElementById('number').textContent = randomNumber;
+    }
+</script>
+</body>
+</html>
+```
+
+This HTML file creates a simple webpage for a random number generator. When the user clicks the "Generate Number" button, a random number between 1 and 100 will be displayed on the screen. The layout is centered on the page with a clean design, responsive to different screen sizes.
