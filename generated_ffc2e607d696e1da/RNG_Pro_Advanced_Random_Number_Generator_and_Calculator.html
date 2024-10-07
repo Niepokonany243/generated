@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RNG Pro - Advanced Random Number Generator & Calculator</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        header {
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+        }
+        button {
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+        .output {
+            font-size: 48px;
+            margin: 20px;
+        }
+        .visualization {
+            width: 100%;
+            height: 300px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjs/lib/browser/math.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.1.1/d3.min.js"></script>
+</head>
+<body>
+    <header>RNG Pro</header>
+    <div id="app" class="container"></div>
+    <script>
+        const { useState, useEffect } = React;
+
+        const App = () => {
+            const [number, setNumber] = useState(null);
+            const [history, setHistory] = useState([]);
+            const [range, setRange] = useState({ min: 1, max: 100 });
+            const [visualData, setVisualData] = useState([]);
+
+            const generateRandomNumber = () => {
+                const randNum = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+                setNumber(randNum);
+                setHistory([...history, randNum]);
+                setVisualData([...visualData, randNum]);
+            };
+
+            useEffect(() => {
+                const ctx = document.getElementById('myChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: visualData.map((_, index) => index + 1),
+                        datasets: [{
+                            label: 'Random Numbers',
+                            data: visualData,
+                            borderColor: 'rgba(98, 0, 238, 1)',
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }, [visualData]);
+
+            return (
+                <>
+                    <button onClick={generateRandomNumber}>Generate Random Number</button>
+                    <div className="output">{number !== null ? number : "Click to generate"}</div>
+                    <canvas id="myChart" className="visualization"></canvas>
+                </>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('app'));
+    </script>
+</body>
+</html>
