@@ -1,0 +1,111 @@
+//index.html
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="calculator">
+        <div class="calculator-screen" id="calculatorScreen">0</div>
+        <div class="calculator-keys" id="calculatorKeys">
+            <button class="key-operator">+</button>
+            <button class="key-operator">-</button>
+            <button class="key-operator">*</button>
+            <button class="key-operator">/</button>
+            <button class="key-function">sin</button>
+            <button class="key-function">cos</button>
+            <button class="key-function">tan</button>
+            <button class="key-function">log</button>
+            <button class="key-function">!</button>
+            <button id="themeSwitch">Switch Theme</button>
+            <button id="saveCalculation">Save Calculation</button>
+            <button id="retrieveCalculation">Retrieve Calculation</button>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
+```
+
+//styles.css
+```css
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.calculator-screen {
+    width: 100%;
+    height: 100px;
+    text-align: right;
+    margin-bottom: 20px;
+    padding-right: 10px;
+    font-size: 3em;
+}
+
+.calculator-keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.key-operator, .key-function {
+    font-size: 2em;
+    padding: 10px;
+    border: none;
+    background-color: var(--button-color);
+    color: var(--button-text-color);
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.key-operator:hover, .key-function:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+#themeSwitch, #saveCalculation, #retrieveCalculation {
+    grid-column: span 4;
+}
+```
+
+//main.js
+```javascript
+let currentTheme = 'light';
+
+const keys = document.getElementById('calculatorKeys');
+const screen = document.getElementById('calculatorScreen');
+
+keys.addEventListener('click', e => {
+    if (e.target.matches('button')) {
+        // Calculator logic goes here
+    }
+});
+
+document.getElementById('themeSwitch').addEventListener('click', () => {
+    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+    document.documentElement.style.setProperty('--bg-color', currentTheme === 'light' ? 'white' : 'black');
+    document.documentElement.style.setProperty('--text-color', currentTheme === 'light' ? 'black' : 'white');
+    document.documentElement.style.setProperty('--button-color', currentTheme === 'light' ? '#f0f0f0' : '#222');
+    document.documentElement.style.setProperty('--button-text-color', currentTheme === 'light' ? 'black' : 'white');
+});
+
+document.getElementById('saveCalculation').addEventListener('click', () => {
+    localStorage.setItem('calculation', screen.innerText);
+});
+
+document.getElementById('retrieveCalculation').addEventListener('click', () => {
+    screen.innerText = localStorage.getItem('calculation');
+});
+```
