@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Number Generator</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --button-bg: #1f1f1f;
+            --button-hover-bg: #3a3a3a;
+            --input-bg: #2c2c2c;
+            --input-border: #444;
+            --error-color: #ff4d4d;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        main {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            transition: color 0.3s;
+        }
+        input[type="number"] {
+            padding: 10px;
+            border: 1px solid var(--input-border);
+            border-radius: 5px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            width: 60%;
+            transition: border-color 0.3s;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--text-color);
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: var(--button-hover-bg);
+        }
+        .error {
+            color: var(--error-color);
+            margin-top: 10px;
+            height: 1.2em;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            input[type="number"] {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main role="main" aria-labelledby="main-title">
+        <h1 id="main-title">Random Number Generator</h1>
+        <input type="number" id="maxNumber" placeholder="Enter maximum number" aria-required="true" aria-describedby="error-message">
+        <button id="generateBtn" aria-label="Generate Random Number">Generate</button>
+        <p id="result" aria-live="polite"></p>
+        <p id="error-message" class="error" aria-hidden="true"></p>
+    </main>
+    <script>
+        const generateBtn = document.getElementById('generateBtn');
+        const maxNumberInput = document.getElementById('maxNumber');
+        const resultDisplay = document.getElementById('result');
+        const errorMessage = document.getElementById('error-message');
+
+        generateBtn.addEventListener('click', () => {
+            const maxNumber = parseInt(maxNumberInput.value);
+            if (isNaN(maxNumber) || maxNumber <= 0) {
+                errorMessage.textContent = 'Please enter a valid positive number.';
+                errorMessage.setAttribute('aria-hidden', 'false');
+                resultDisplay.textContent = '';
+                return;
+            }
+            errorMessage.textContent = '';
+            errorMessage.setAttribute('aria-hidden', 'true');
+            const randomNumber = Math.floor(Math.random() * maxNumber) + 1;
+            resultDisplay.textContent = `Random Number: ${randomNumber}`;
+        });
+
+        maxNumberInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                generateBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
