@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Creator</title>
+    <style>
+        :root {
+            --background-color: #333;
+            --text-color: #eee;
+            --button-color: #777;
+        }
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .quiz-container {
+            max-width: 500px;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        label, input, button {
+            display: block;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        button {
+            background-color: var(--button-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: var(--text-color);
+            color: var(--background-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <label for="question">Question</label>
+        <input id="question" type="text" required>
+        <label for="answer">Answer</label>
+        <input id="answer" type="text" required>
+        <button id="createQuiz">Create Quiz</button>
+        <div id="quiz"></div>
+    </div>
+    <script>
+        const questionInput = document.querySelector('#question');
+        const answerInput = document.querySelector('#answer');
+        const createQuizButton = document.querySelector('#createQuiz');
+        const quizDiv = document.querySelector('#quiz');
+
+        createQuizButton.addEventListener('click', () => {
+            if (questionInput.value && answerInput.value) {
+                const questionParagraph = document.createElement('p');
+                questionParagraph.textContent = questionInput.value;
+                quizDiv.appendChild(questionParagraph);
+
+                const answerButton = document.createElement('button');
+                answerButton.textContent = 'Show Answer';
+                answerButton.type = 'button';
+                answerButton.addEventListener('click', () => {
+                    const answerParagraph = document.createElement('p');
+                    answerParagraph.textContent = answerInput.value;
+                    quizDiv.appendChild(answerParagraph);
+                    answerButton.style.display = 'none';
+                });
+                quizDiv.appendChild(answerButton);
+
+                questionInput.value = '';
+                answerInput.value = '';
+            } else {
+                alert('Please fill out all inputs');
+            }
+        });
+    </script>
+</body>
+</html>
