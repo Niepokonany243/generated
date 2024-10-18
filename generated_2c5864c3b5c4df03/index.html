@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode Game</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --button-bg: #1e1e1e;
+            --button-hover-bg: #3c3c3c;
+            --highlight-color: #bb86fc;
+            --transition: 0.3s;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color var(--transition), color var(--transition);
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--button-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: background-color var(--transition);
+        }
+        button {
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color var(--transition);
+        }
+        button:hover {
+            background-color: var(--button-hover-bg);
+        }
+        .score {
+            font-size: 1.5rem;
+            margin-top: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            button {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main aria-labelledby="game-title">
+        <h1 id="game-title">Guess the Number!</h1>
+        <div class="game-container" role="region" aria-live="polite">
+            <input type="number" id="guess" placeholder="Enter your guess" aria-label="Your guess" />
+            <button id="submit-btn">Submit</button>
+            <p class="score hidden" id="score">Score: 0</p>
+            <p id="message" class="hidden"></p>
+        </div>
+    </main>
+    <script>
+        const submitBtn = document.getElementById('submit-btn');
+        const guessInput = document.getElementById('guess');
+        const messageDisplay = document.getElementById('message');
+        const scoreDisplay = document.getElementById('score');
+        let randomNumber = Math.floor(Math.random() * 100) + 1;
+        let score = 0;
+
+        const updateMessage = (message, isError = false) => {
+            messageDisplay.classList.remove('hidden');
+            messageDisplay.style.color = isError ? 'red' : 'var(--highlight-color)';
+            messageDisplay.textContent = message;
+        };
+
+        const validateInput = (input) => {
+            const number = Number(input);
+            return !isNaN(number) && number >= 1 && number <= 100;
+        };
+
+        submitBtn.addEventListener('click', () => {
+            const guess = guessInput.value;
+            if (!validateInput(guess)) {
+                updateMessage('Please enter a valid number between 1 and 100.', true);
+                return;
+            }
+            const guessNumber = Number(guess);
+            if (guessNumber === randomNumber) {
+                score++;
+                updateMessage('Correct! 🎉');
+                scoreDisplay.classList.remove('hidden');
+                scoreDisplay.textContent = `Score: ${score}`;
+                randomNumber = Math.floor(Math.random() * 100) + 1;
+                guessInput.value = '';
+            } else if (guessNumber < randomNumber) {
+                updateMessage('Too low! Try again.');
+            } else {
+                updateMessage('Too high! Try again.');
+            }
+        });
+
+        guessInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                submitBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
