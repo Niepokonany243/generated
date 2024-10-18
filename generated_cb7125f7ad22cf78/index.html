@@ -1,0 +1,163 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode Game</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --accent-color: #bb86fc;
+            --button-bg: #1e1e1e;
+            --button-hover-bg: #3700b3;
+            --border-color: #bb86fc;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            background-color: var(--button-bg);
+            transition: background-color 0.3s;
+        }
+
+        .button {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        .score {
+            margin: 10px 0;
+            font-size: 1.5rem;
+        }
+
+        .game-area {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: var(--button-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--text-color);
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .cell:hover {
+            background-color: var(--accent-color);
+        }
+
+        @media (max-width: 600px) {
+            .game-area {
+                grid-template-columns: repeat(3, 80px);
+                grid-template-rows: repeat(3, 80px);
+            }
+
+            .cell {
+                width: 80px;
+                height: 80px;
+                font-size: 1.5rem;
+            }
+
+            .button {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" role="main">
+        <h1>Dark Mode Game</h1>
+        <div class="score" aria-live="polite">Score: <span id="score">0</span></div>
+        <div class="game-area" id="gameArea"></div>
+        <button class="button" id="restartButton">Restart</button>
+    </div>
+    <script>
+        const gameArea = document.getElementById('gameArea');
+        const scoreDisplay = document.getElementById('score');
+        const restartButton = document.getElementById('restartButton');
+        let score = 0;
+        let gameActive = true;
+
+        const createCells = () => {
+            gameArea.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.setAttribute('role', 'button');
+                cell.setAttribute('tabindex', '0');
+                cell.addEventListener('click', () => handleCellClick(cell));
+                cell.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') handleCellClick(cell);
+                });
+                gameArea.appendChild(cell);
+            }
+        };
+
+        const handleCellClick = (cell) => {
+            if (!gameActive || cell.textContent) return;
+            cell.textContent = 'X';
+            score++;
+            scoreDisplay.textContent = score;
+            if (score >= 9) {
+                alert('You win!');
+                gameActive = false;
+            }
+        };
+
+        const restartGame = () => {
+            score = 0;
+            scoreDisplay.textContent = score;
+            gameActive = true;
+            createCells();
+        };
+
+        restartButton.addEventListener('click', restartGame);
+        createCells();
+    </script>
+</body>
+
+</html>
