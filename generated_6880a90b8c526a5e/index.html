@@ -1,0 +1,167 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Converter</title>
+    <style>
+        :root {
+            --background-color: #121212;
+            --primary-color: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent-color: #bb86fc;
+            --border-color: #333;
+            --button-color: #6200ee;
+            --button-hover-color: #3700b3;
+            --transition-speed: 0.3s;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        select, input[type="number"], button {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            width: calc(100% - 22px);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+        select:focus, input[type="number"]:focus, button:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        button {
+            background-color: var(--button-color);
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: var(--button-hover-color);
+        }
+        .result {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        @media (min-width: 600px) {
+            .converter {
+                display: flex;
+                justify-content: center;
+            }
+            .converter > div {
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Big Converter</h1>
+        <p>Convert between various units effortlessly</p>
+    </header>
+    <main>
+        <div class="converter" role="form" aria-labelledby="converter-title">
+            <div>
+                <label for="value">Value:</label>
+                <input type="number" id="value" aria-required="true" required>
+            </div>
+            <div>
+                <label for="fromUnit">From:</label>
+                <select id="fromUnit" aria-required="true" required>
+                    <option value="km">Kilometers (km)</option>
+                    <option value="m">Meters (m)</option>
+                    <option value="cm">Centimeters (cm)</option>
+                    <option value="mm">Millimeters (mm)</option>
+                    <option value="kg">Kilograms (kg)</option>
+                    <option value="g">Grams (g)</option>
+                    <option value="l">Liters (l)</option>
+                    <option value="ml">Milliliters (ml)</option>
+                    <option value="mi">Miles (mi)</option>
+                    <option value="yd">Yards (yd)</option>
+                    <option value="ft">Feet (ft)</option>
+                    <option value="in">Inches (in)</option>
+                    <option value="oz">Ounces (oz)</option>
+                </select>
+            </div>
+            <div>
+                <label for="toUnit">To:</label>
+                <select id="toUnit" aria-required="true" required>
+                    <option value="km">Kilometers (km)</option>
+                    <option value="m">Meters (m)</option>
+                    <option value="cm">Centimeters (cm)</option>
+                    <option value="mm">Millimeters (mm)</option>
+                    <option value="kg">Kilograms (kg)</option>
+                    <option value="g">Grams (g)</option>
+                    <option value="l">Liters (l)</option>
+                    <option value="ml">Milliliters (ml)</option>
+                    <option value="mi">Miles (mi)</option>
+                    <option value="yd">Yards (yd)</option>
+                    <option value="ft">Feet (ft)</option>
+                    <option value="in">Inches (in)</option>
+                    <option value="oz">Ounces (oz)</option>
+                </select>
+            </div>
+        </div>
+        <button id="convertButton">Convert</button>
+        <div class="result" id="result" role="alert"></div>
+    </main>
+    <footer>
+        <p>© 2023 Big Converter</p>
+    </footer>
+    <script>
+        const conversionRates = {
+            km: { m: 1000, cm: 100000, mm: 1000000, mi: 0.621371, yd: 1093.61, ft: 3280.84, in: 39370.1, l: 1000, ml: 1000000, kg: 1000, g: 1000000, oz: 35195.1 },
+            m: { km: 0.001, cm: 100, mm: 1000, mi: 0.000621371, yd: 1.09361, ft: 3.28084, in: 39.3701, l: 1, ml: 1000, kg: 1, g: 1000, oz: 35.274 },
+            cm: { km: 0.00001, m: 0.01, mm: 10, mi: 0.0000062137, yd: 0.0109361, ft: 0.0328084, in: 0.393701, l: 0.001, ml: 1000, kg: 0.001, g: 1, oz: 0.035274 },
+            mm: { km: 0.000001, m: 0.001, cm: 0.1, mi: 0.000000621371, yd: 0.00109361, ft: 0.00328084, in: 0.0393701, l: 0.0001, ml: 100, kg: 0.0001, g: 0.1, oz: 0.0035274 },
+            kg: { g: 1000, l: 1, ml: 1000, oz: 35.274 },
+            g: { kg: 0.001, l: 0.001, ml: 1, oz: 0.035274 },
+            l: { ml: 1000, kg: 1, g: 1000, oz: 33.814 },
+            ml: { l: 0.001, kg: 0.001, g: 1, oz: 0.033814 },
+            mi: { km: 1.60934, m: 1609.34, yd: 1760, ft: 5280, in: 63360 },
+            yd: { km: 0.0009144, m: 0.9144, ft: 3, in: 36, mi: 0.000568182 },
+            ft: { km: 0.0003048, m: 0.3048, yd: 0.333333, in: 12, mi: 0.000189394 },
+            in: { km: 0.0000254, m: 0.0254, yd: 0.0277778, ft: 0.0833333, mi: 0.0000157828 },
+            oz: { kg: 0.0283495, g: 28.3495, l: 0.0295735, ml: 29.5735 },
+        };
+
+        const convertButton = document.getElementById('convertButton');
+        const valueInput = document.getElementById('value');
+        const fromUnitSelect = document.getElementById('fromUnit');
+        const toUnitSelect = document.getElementById('toUnit');
+        const resultDiv = document.getElementById('result');
+
+        convertButton.addEventListener('click', () => {
+            const value = parseFloat(valueInput.value);
+            const fromUnit = fromUnitSelect.value;
+            const toUnit = toUnitSelect.value;
+            if (isNaN(value)) {
+                resultDiv.textContent = 'Please enter a valid number.';
+                return;
+            }
+            if (fromUnit === toUnit) {
+                resultDiv.textContent = `Result: ${value} ${toUnit}`;
+                return;
+            }
+            const conversionFactor = conversionRates[fromUnit][toUnit];
+            if (conversionFactor) {
+                const convertedValue = value * conversionFactor;
+                resultDiv.textContent = `Result: ${convertedValue.toFixed(4)} ${toUnit}`;
+            } else {
+                resultDiv.textContent = 'Conversion not possible.';
+            }
+        });
+    </script>
+</body>
+</html>
