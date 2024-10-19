@@ -1,0 +1,150 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Quiz App</title>
+    <style>
+        :root {
+            --background-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-background: #2a2a2a;
+            --button-background: #4a4a4a;
+            --button-hover: #5a5a5a;
+            --error-color: #ff4d4d;
+            --transition-speed: 0.3s;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .quiz-container {
+            background: var(--card-background);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            transition: background var(--transition-speed);
+        }
+        button {
+            background: var(--button-background);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background var(--transition-speed);
+        }
+        button:hover {
+            background: var(--button-hover);
+        }
+        .error {
+            color: var(--error-color);
+            margin-top: 10px;
+            display: none;
+        }
+        .question {
+            margin: 10px 0;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            margin: 5px 0;
+            padding: 10px;
+            background: var(--button-background);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background var(--transition-speed);
+        }
+        .option:hover {
+            background: var(--button-hover);
+        }
+        @media (max-width: 600px) {
+            .quiz-container {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Random Quiz App</h1>
+    <div class="quiz-container" role="region" aria-labelledby="quiz-title">
+        <h2 id="quiz-title">Select a Quiz</h2>
+        <button id="start-quiz">Start Quiz</button>
+        <div class="error" id="error-message" role="alert"></div>
+        <div id="quiz" aria-live="polite"></div>
+    </div>
+
+    <script>
+        const quizzes = {
+            Quiz1: [
+                "What is the capital of France?", 
+                "What is 2 + 2?",
+                "What is the largest mammal?", 
+                "What is the boiling point of water?",
+                "What is the currency of Japan?" 
+            ],
+            Quiz2: [
+                "Who wrote 'Romeo and Juliet'?", 
+                "What is the chemical symbol for water?", 
+                "Who painted the Mona Lisa?", 
+                "What is the fastest land animal?",
+                "What planet is known as the Red Planet?"
+            ],
+            Quiz3: [
+                "What is the largest planet in our solar system?", 
+                "What year did the Titanic sink?", 
+                "What is the smallest country in the world?", 
+                "What is the main ingredient in guacamole?",
+                "How many continents are there?"
+            ],
+        };
+
+        const startQuizButton = document.getElementById('start-quiz');
+        const quizContainer = document.getElementById('quiz');
+        const errorMessage = document.getElementById('error-message');
+
+        startQuizButton.addEventListener('click', () => {
+            errorMessage.style.display = 'none';
+            const selectedQuiz = Object.keys(quizzes)[Math.floor(Math.random() * Object.keys(quizzes).length)];
+            loadQuiz(selectedQuiz);
+        });
+
+        function loadQuiz(quizName) {
+            const questions = quizzes[quizName];
+            const questionIndex = Math.floor(Math.random() * questions.length);
+            const question = questions[questionIndex];
+            quizContainer.innerHTML = `<div class="question">${question}</div><div class="options">${generateOptions()}</div>`;
+        }
+
+        function generateOptions() {
+            const options = ["Option A", "Option B", "Option C", "Option D"];
+            return options.map(option => `<div class="option" tabindex="0" role="button" onclick="checkAnswer(this)">${option}</div>`).join('');
+        }
+
+        function checkAnswer(selectedOption) {
+            const allOptions = document.querySelectorAll('.option');
+            allOptions.forEach(option => option.style.pointerEvents = 'none');
+            selectedOption.style.backgroundColor = 'green';
+            setTimeout(() => {
+                loadQuiz(Object.keys(quizzes)[Math.floor(Math.random() * Object.keys(quizzes).length)]);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
