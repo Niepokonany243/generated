@@ -1,0 +1,146 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toolbox - A Collection of Useful Tools</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --button-bg: #6200ea;
+            --button-hover-bg: #3700b3;
+            --input-bg: #2c2c2c;
+            --input-border: #444;
+            --transition-speed: 0.3s;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform var(--transition-speed);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .button {
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color var(--transition-speed);
+            width: 100%;
+        }
+        .button:hover {
+            background-color: var(--button-hover-bg);
+        }
+        .input {
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 5px;
+            color: var(--text-color);
+            padding: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+            transition: border-color var(--transition-speed);
+        }
+        .input:focus {
+            border-color: var(--button-bg);
+            outline: none;
+        }
+        .error-message {
+            color: #ff5252;
+            font-size: 12px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-color: #ffffff;
+                --text-color: #000000;
+                --card-bg: #f5f5f5;
+                --button-bg: #6200ea;
+                --button-hover-bg: #3700b3;
+                --input-bg: #ffffff;
+                --input-border: #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Toolbox</h1>
+    </header>
+    <main class="container" role="main">
+        <div class="card" role="region" aria-labelledby="calculator">
+            <h2 id="calculator">Calculator</h2>
+            <input type="text" class="input" id="calc-input" placeholder="Enter calculation" aria-label="Calculator input">
+            <button class="button" onclick="calculate()">Calculate</button>
+            <p id="calc-result" aria-live="polite"></p>
+        </div>
+        <div class="card" role="region" aria-labelledby="color-converter">
+            <h2 id="color-converter">Hex to RGB Converter</h2>
+            <input type="text" class="input" id="hex-input" placeholder="#ffffff" aria-label="Hex color input">
+            <button class="button" onclick="convertHexToRgb()">Convert</button>
+            <p id="rgb-result" aria-live="polite"></p>
+        </div>
+    </main>
+    <script>
+        function calculate() {
+            const input = document.getElementById('calc-input').value;
+            const result = document.getElementById('calc-result');
+            try {
+                const evalResult = eval(input);
+                result.textContent = `Result: ${evalResult}`;
+            } catch {
+                result.textContent = "Error: Invalid calculation";
+            }
+        }
+        function convertHexToRgb() {
+            const hexInput = document.getElementById('hex-input').value;
+            const result = document.getElementById('rgb-result');
+            const hexPattern = /^#([0-9A-F]{3}|[0-9A-F]{6})$/i;
+            if (!hexPattern.test(hexInput)) {
+                result.textContent = "Error: Invalid hex color";
+                return;
+            }
+            let r, g, b;
+            if (hexInput.length === 4) {
+                r = parseInt(hexInput[1] + hexInput[1], 16);
+                g = parseInt(hexInput[2] + hexInput[2], 16);
+                b = parseInt(hexInput[3] + hexInput[3], 16);
+            } else {
+                r = parseInt(hexInput[1] + hexInput[2], 16);
+                g = parseInt(hexInput[3] + hexInput[4], 16);
+                b = parseInt(hexInput[5] + hexInput[6], 16);
+            }
+            result.textContent = `RGB: ${r}, ${g}, ${b}`;
+        }
+    </script>
+</body>
+</html>
