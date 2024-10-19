@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random World Facts</title>
+    <style>
+        :root {
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --accent-color: #bb86fc;
+            --card-background: #1e1e1e;
+            --transition-speed: 0.3s;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+        h1 {
+            margin-bottom: 1rem;
+        }
+        button {
+            background-color: var(--accent-color);
+            border: none;
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background-color var(--transition-speed);
+        }
+        button:hover {
+            background-color: #9b59b6;
+        }
+        .fact-card {
+            background-color: var(--card-background);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            text-align: center;
+            transition: transform var(--transition-speed);
+        }
+        .fact-card:hover {
+            transform: scale(1.02);
+        }
+        .fact {
+            font-size: 1.2rem;
+            margin: 1rem 0;
+        }
+        @media (max-width: 600px) {
+            .fact {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Random World Facts</h1>
+    </header>
+    <main>
+        <div class="fact-card" role="region" aria-labelledby="fact-title">
+            <div id="fact" class="fact">Click the button to get a random fact!</div>
+            <button id="new-fact" aria-label="Get a new random fact">New Fact</button>
+        </div>
+    </main>
+    <script>
+        const factElement = document.getElementById('fact');
+        const button = document.getElementById('new-fact');
+        const facts = [
+            "Bananas are berries, but strawberries aren't.",
+            "Honey never spoils. Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3000 years old and still edible.",
+            "There are more stars in the universe than grains of sand on all the Earth's beaches.",
+            "Octopuses have three hearts.",
+            "The Eiffel Tower can be 15 cm taller during the summer due to thermal expansion.",
+            "Some cats are allergic to humans.",
+            "A group of flamingos is called a 'flamboyance'.",
+            "The world's largest desert is Antarctica.",
+            "Wombat poop is cube-shaped.",
+            "Scotland's national animal is the unicorn."
+        ];
+
+        function getRandomFact() {
+            const randomIndex = Math.floor(Math.random() * facts.length);
+            factElement.textContent = facts[randomIndex];
+        }
+
+        button.addEventListener('click', getRandomFact);
+        getRandomFact();
+    </script>
+</body>
+</html>
