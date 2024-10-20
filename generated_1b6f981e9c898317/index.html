@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Random Web</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+        .container {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .button {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #005f73;
+        }
+        footer {
+            text-align: center;
+            padding: 1em 0;
+            margin-top: auto;
+            background-color: #333;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to The Random Web!</h1>
+        <p>Your adventure of exploration and discovery begins here.</p>
+    </header>
+    <div class="container">
+        <p>Click the button below to generate random content!</p>
+        <button class="button" id="randomContentBtn">Get Random Content</button>
+        <div id="contentArea"></div>
+    </div>
+    <footer>
+        <p>&copy; 2023 The Random Web. All rights reserved.</p>
+    </footer>
+</body>
+</html>
